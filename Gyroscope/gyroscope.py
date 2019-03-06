@@ -19,7 +19,7 @@ yGyro  = 0x45 # Y Axis.
 zGyro  = 0x47 # Z Axis.
 
 def setup(devAddress, sysBus):
-	sysBus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Set sample register
+	sysBus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Determine refresh rate.
 	sysBus.write_byte_data(devAddress, PWR_MGMT_1, 1) # Set power register
 	sysBus.write_byte_data(devAddress, CONFIG, 0) # Set physical device config register
 	sysBus.write_byte_data(devAddress, GYRO_CONFIG, 24) # Set gyroscope element register
