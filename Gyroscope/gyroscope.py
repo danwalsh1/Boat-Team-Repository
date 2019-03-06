@@ -12,33 +12,32 @@ xGyro  = 0x43 # X Axis Memory Register references.
 yGyro  = 0x45 # Y Axis - Need to check.
 zGyro  = 0x47 # Z Axis - Need to check.
 
-def setup(devAddress):
-
-bus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Set sample register
+def setup(devAddress, bus):
+	bus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Set sample register
 	bus.write_byte_data(devAddress, PWR_MGMT_1, 1) # Set power register
 	bus.write_byte_data(devAddress, CONFIG, 0) # Set physical device config register
 	bus.write_byte_data(devAddress, GYRO_CONFIG, 24) # Set gyroscope element register
 	bus.write_byte_data(devAddress, INT_ENABLE, 1) # Set interrupts to be possible in the interrupt register.
 	
 def readData(devAddress, address, busConfig):
-	#Accelero and Gyro value are 16-bit
+	#Gyro is 16 bit, 2 bytes of information, one value will be used, the other dropped based on value presence<Or gate principals>.
         high = busConfig.read_byte_data(devAddress, address) 
         low = busConfig.read_byte_data(devAddress, address+1)
     
-        #concatenate higher and lower value
+        # Will join the values together used OR gate principal, if present in either = 1, else = 0.
         value = ((high << 8) | low) # Bitwise Or statement, << means to move bits 8 places to the left(Clears the register byte).
         
-        #to get signed value from mpu6050
-        if(value > 32768):
+        #Retrieves signed form of the value.
+        if(value > 32768): # 16bit devices have a range of -32768 to +32767 so this acts as a Analog to Digital converter.
                 value = value - 65536
         return value
 
 def runner(device):
 	
-	setup(device)
 	bus = smbus.SMBus(1) # Establish device connection with the serial bus.
-	
-	sensitivity = 131.00  #Sensitivity divisor, uses LSB, is the most accurate the gyroscope module can be.
+	setup(device, bus)
+		
+	sensitivity = 131.00  #Sensitivity divisor, utilises LSB, is the most accurate/sensitive the gyroscope module can be.
 	readGyroX = readData(device, xGyro, bus)
 	readGyroY = readData(device, yGyro, bus)
 	readGyroZ = readData(device, zGyro, bus)
