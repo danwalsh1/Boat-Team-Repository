@@ -47,7 +47,7 @@ def runner(device):
 	gyroZValue = readGyroZ/sensitivity 
 	
 
-	print ("X Gyro= " + str(gyroXValue) + " Degrees per second", "Y Gyro= " + str(gyroYValue) + " Degrees per second", "Z Gyro= " + str(gyroZValue) + " Degrees per second")
+	print ("X Gyro= " + str(gyroXValue) + " Degrees per second" + " " + "Y Gyro= " + str(gyroYValue) + " Degrees per second" + " " + "Z Gyro= " + str(gyroZValue) + " Degrees per second")
 
 runner(deviceAddr)
 
