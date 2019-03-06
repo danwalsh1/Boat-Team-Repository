@@ -12,12 +12,12 @@ xGyro  = 0x43 # X Axis Memory Register references.
 yGyro  = 0x45 # Y Axis - Need to check.
 zGyro  = 0x47 # Z Axis - Need to check.
 
-def setup(devAddress, bus):
-	bus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Set sample register
-	bus.write_byte_data(devAddress, PWR_MGMT_1, 1) # Set power register
-	bus.write_byte_data(devAddress, CONFIG, 0) # Set physical device config register
-	bus.write_byte_data(devAddress, GYRO_CONFIG, 24) # Set gyroscope element register
-	bus.write_byte_data(devAddress, INT_ENABLE, 1) # Set interrupts to be possible in the interrupt register.
+def setup(devAddress, sysBus):
+	sysBus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Set sample register
+	sysBus.write_byte_data(devAddress, PWR_MGMT_1, 1) # Set power register
+	sysBus.write_byte_data(devAddress, CONFIG, 0) # Set physical device config register
+	sysBus.write_byte_data(devAddress, GYRO_CONFIG, 24) # Set gyroscope element register
+	sysBus.write_byte_data(devAddress, INT_ENABLE, 1) # Set interrupts to be possible in the interrupt register.
 	
 def readData(devAddress, address, busConfig):
 	#Gyro is 16 bit, 2 bytes of information, one value will be used, the other dropped based on value presence<Or gate principals>.
