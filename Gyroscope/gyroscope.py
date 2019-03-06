@@ -3,14 +3,20 @@
 import smbus
 
 deviceAddr = 0x68   # Correct device address.
+
+########################################
 PWR_MGMT_1   = 0x6B #Need to check.
 SMPLRT_DIV   = 0x19 #Need to check.
 CONFIG       = 0x1A #Need to check.
 GYRO_CONFIG  = 0x1B #Need to check.
 INT_ENABLE   = 0x38 #Need to check.
+
+########################################
+
+
 xGyro  = 0x43 # X Axis Memory Register references.
-yGyro  = 0x45 # Y Axis - Need to check.
-zGyro  = 0x47 # Z Axis - Need to check.
+yGyro  = 0x45 # Y Axis.
+zGyro  = 0x47 # Z Axis.
 
 def setup(devAddress, sysBus):
 	sysBus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Set sample register
