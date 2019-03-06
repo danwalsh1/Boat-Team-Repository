@@ -1,4 +1,5 @@
 Andrew/Hardeep
+#this part of the code was copied in part from gareth and adrians work 
 
 import RPi.GPIO as GPIO
 
