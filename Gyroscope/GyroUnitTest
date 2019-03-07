@@ -1,0 +1,12 @@
+import unittest
+import smbus
+from mock import mock, patch
+
+
+class TestGyroscope(unittest.TestCase):
+    def test_setup(self):
+        
+
+
+if __name__ == '__main__':
+    unittest.main()
