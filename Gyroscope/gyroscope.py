@@ -39,17 +39,19 @@ def readData(devAddress, address, busConfig):
         return joinUpperandLower
 
 def runner(device):
-	
-	bus = smbus.SMBus(1) # Establish device connection with the serial bus.
-	setup(device, bus)
-	sensitivity = 131.00  #Sensitivity divisor, utilises LSB, is the most accurate/sensitive the gyroscope module can be.
-	
-	gyroXValue = (readData(device, xGyro, bus))/sensitivity
-	gyroYValue = (readData(device, xGyro, bus))/sensitivity
-	gyroZValue = (readData(device, xGyro, bus))/sensitivity 
-	
+	try:
+            bus = smbus.SMBus(1) # Establish device connection with the serial bus.
+            setup(device, bus)
+            sensitivity = 131.00  #Sensitivity divisor, utilises LSB, is the most accurate/sensitive the gyroscope module can be.
 
-	print ("X Gyro= " + str(gyroXValue) + " Degrees per second" + " " + "Y Gyro= " + str(gyroYValue) + " Degrees per second" + " " + "Z Gyro= " + str(gyroZValue) + " Degrees per second")
+            gyroXValue = (readData(device, xGyro, bus))/sensitivity
+            gyroYValue = (readData(device, xGyro, bus))/sensitivity
+            gyroZValue = (readData(device, xGyro, bus))/sensitivity
+            print ("X Gyro= " + str(gyroXValue) + " Degrees per second" + " " + "Y Gyro= " + str(gyroYValue) + " Degrees per second" + " " + "Z Gyro= " + str(gyroZValue) + " Degrees per second")
 
+        except:
+            print ("Error")
+	
 runner(deviceAddr)
+
 
