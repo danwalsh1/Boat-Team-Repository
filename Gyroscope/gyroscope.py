@@ -49,8 +49,8 @@ def runner(device):
             sensitivity = 131.00  #Sensitivity divisor, utilises LSB, this sets the angular velocity to 250 degrees per second(most sensitive setting).
 
             gyroXValue = (readData(device, xGyro, bus))/sensitivity
-            gyroYValue = (readData(device, xGyro, bus))/sensitivity
-            gyroZValue = (readData(device, xGyro, bus))/sensitivity
+            gyroYValue = (readData(device, yGyro, bus))/sensitivity
+            gyroZValue = (readData(device, zGyro, bus))/sensitivity
             
 	    print ("X Gyro= " + str(gyroXValue) + " Degrees per second" + " " + "Y Gyro= " + str(gyroYValue) + " Degrees per second" + " " + "Z Gyro= " + str(gyroZValue) + " Degrees per second")
 
