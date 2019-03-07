@@ -1,3 +1,5 @@
+#Hardeep and Andrew
+#This part of the code was copied in part from gareth and adrians work
 import RPi.GPIO as GPIO
 
 def setupPi(frequency):
@@ -37,5 +39,5 @@ if rudderAngle == "q" or rudderAngle == "Q":
     runner = false
     print("finished")
 
-setrudder(setup, sailAngle)    
+setrudder(setup, rudderAngle)    
 
