@@ -20,28 +20,32 @@ zGyro  = 0x47 # Z Axis.
 
 def setup(devAddress, sysBus)
 """ Initialise the registers for interaction """
-	sysBus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Determine refresh rate.
-	sysBus.write_byte_data(devAddress, PWR_MGMT_1, 1) # Set power register
-	sysBus.write_byte_data(devAddress, CONFIG, 0) # Set physical device config register
-	sysBus.write_byte_data(devAddress, GYRO_CONFIG, 24) # Set gyroscope element register
-	sysBus.write_byte_data(devAddress, INT_ENABLE, 1) # Set interrupts to be possible in the interrupt register.
-	
+	try:
+		sysBus.write_byte_data(devAddress, SMPLRT_DIV, 7) # Determine refresh rate.
+		sysBus.write_byte_data(devAddress, PWR_MGMT_1, 1) # Set power register
+		sysBus.write_byte_data(devAddress, CONFIG, 0) # Set physical device config register
+		sysBus.write_byte_data(devAddress, GYRO_CONFIG, 24) # Set gyroscope element register
+		sysBus.write_byte_data(devAddress, INT_ENABLE, 1) # Set interrupts to be possible in the interrupt register.
+	except:
+		print("Error in setup function")
 def readData(devAddress, address, busConfig):
 	# Gyro is 16 bit, join the values together using an or gate. 
 	# Address is the mem registers hex ID. devAddress is the physical gyroscope.
-        register1Higher = busConfig.read_byte_data(devAddress, address) 
-        register2Lower = busConfig.read_byte_data(devAddress, address+1)
-    
-        # Will join the bit values together using an OR gate
-	# As a representation a 1 present in either register equals 1 as output, else = 0.
-        joinHigherAndLower = ((register1Higher << 8) | register2Lower) # Bitwise Or statement on 16 bit register.  << means to move bits 8 places to the left while calculating or gate value.
-	 
-        if(joinHigherAndLower < 32768): # 16bit devices have a range of -32768 to +32767 so this acts as a converter from signed to unsigned.    
-        	return joinHigherAndLower # Signed Value returned.
-	else:
-		joinHigherAndLower = joinHigherAndLower - 65536
-		return joinHigherAndLower # Signed Value returned.
+	try:
+		register1Higher = busConfig.read_byte_data(devAddress, address) 
+		register2Lower = busConfig.read_byte_data(devAddress, address+1)
 
+		# Will join the bit values together using an OR gate
+		# As a representation a 1 present in either register equals 1 as output, else = 0.
+		joinHigherAndLower = ((register1Higher << 8) | register2Lower) # Bitwise Or statement on 16 bit register.  << means to move bits 8 places to the left while calculating or gate value.
+
+		if(joinHigherAndLower < 32768): # 16bit devices have a range of -32768 to +32767 so this acts as a converter from signed to unsigned.    
+			return joinHigherAndLower # Signed Value returned.
+		else:
+			joinHigherAndLower = joinHigherAndLower - 65536
+			return joinHigherAndLower # Signed Value returned.
+	except:
+		print("Error in readData function")
 def runner(device):
 	try:
             bus = smbus.SMBus(1) # Establish device connection with the serial bus at I2C position 1(I2C1).
@@ -55,7 +59,7 @@ def runner(device):
 	    print ("X Gyro= " + str(gyroXValue) + " Degrees per second" + " " + "Y Gyro= " + str(gyroYValue) + " Degrees per second" + " " + "Z Gyro= " + str(gyroZValue) + " Degrees per second")
 
         except:
-            print ("Error")
+            print ("Error in runner function")
 	
 runner(deviceAddr)
 
