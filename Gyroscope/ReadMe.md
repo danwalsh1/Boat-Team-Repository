@@ -1,4 +1,4 @@
-I2c tools using specifically the smbus library. 
+Using the smbus library. 
 
 Read device hardware address. Presets the relevant addresses with series of register writes.
 
