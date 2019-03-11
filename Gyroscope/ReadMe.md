@@ -10,3 +10,5 @@ Formula to determine a usable signed value using 2s complement:
 Angular velocity determined, sensitivity uses lsb to determine output. lsb set to 131.00 which is the most appropriate for the slow revolutions of the boat, higher sensitivity required for faster spinning objects.
 
 values output in degrees per second, 250(sensitivity)/60(secs per min) = the max degrees that are recognised per second.
+
+x is pitch, y is roll, x is yaw.
