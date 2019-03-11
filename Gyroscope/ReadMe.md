@@ -11,4 +11,4 @@ Angular velocity determined, sensitivity uses lsb to determine output. lsb set t
 
 values output in degrees per second, 250(sensitivity)/60(secs per min) = the max degrees that are recognised per second.
 
-x is pitch, y is roll, x is yaw.
+x is pitch, y is roll, z is yaw.
