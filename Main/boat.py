@@ -1,12 +1,13 @@
-import Main from New_compass_code.py #Compass Input
+import main from New_compass_code.py #Compass Input
 import retrieveGPS from RetrieveGPS.py #GPS Input
 import gyroMain from gyroscope.py #Gyroscope Output
 import RudderMain from RudderMove.py #Rudder Output
 import sailMain from sail.py #Sail Output
-#import compassMain from compass.py #compass
 
 Lat, Long = 0
 startHeading = [Lat, Long]
+currentHeading = startHeading
+destinationHeading = []
 
 def concatenateMain():
     print ("To stop the script press LCTRL + C")
@@ -15,7 +16,7 @@ def concatenateMain():
         boolRunning = True
         while boolRunning:
             try:
-                interpretDirection(retrieveGPS(), Compass) #return value from retrieveGPS used as Parameter
+                interpretDirection(retrieveGPS(), main()) #return value from retrieveGPS used as Parameter
                 gyroMain()
             except KeyboardInterrupt:
                 boolRunning = False
