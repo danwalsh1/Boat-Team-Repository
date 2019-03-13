@@ -29,17 +29,17 @@ def setSail(pin, angle):
     
     return "Success"
 
+def sailMain():
+    setup = setupPi() 
+    #runner = true
 
-setup = setupPi() 
-#runner = true
+    sailAngle = int(input("Please enter the angle you would like the sail and then press enter: ")) #90 degrees as the angle is central starting location.
 
-sailAngle = int(input("Please enter the angle you would like the sail and then press enter: ")) #90 degrees as the angle is central starting location.
-
-"""
-while runner:
-    sailAngle = int(input("Please enter the angle you would like the sail and then press enter: ")) # 90 degrees as the angle is currently central starting location.
-    if sailAngle == "q" or sailAngle == "Q":
-        runner = false
-        print("Finished")
-"""    
-setSail(setup, sailAngle)
+    """
+    while runner:
+        sailAngle = int(input("Please enter the angle you would like the sail and then press enter: ")) # 90 degrees as the angle is currently central starting location.
+        if sailAngle == "q" or sailAngle == "Q":
+            runner = false
+            print("Finished")
+    """    
+    setSail(setup, sailAngle)
