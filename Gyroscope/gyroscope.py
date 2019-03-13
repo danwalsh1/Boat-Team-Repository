@@ -60,7 +60,8 @@ def runner(device):
 
         except:
             print ("Error in runner function")
-	
-runner(deviceAddr)
+
+def gyroMain():
+	runner(deviceAddr)
 
 
