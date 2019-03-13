@@ -1,5 +1,5 @@
 #########References elements from http://www.electronicwings.com/raspberry-pi/mpu6050-accelerometergyroscope-interfacing-with-raspberry-pi ##################
-
+###Gareth and Andrew
 import smbus
 
 deviceAddr = 0x68   # Correct device address.
