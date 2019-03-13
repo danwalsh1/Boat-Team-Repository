@@ -1,3 +1,5 @@
+#Andrew, Gareth, Adrian
+
 import main from New_compass_code.py #Compass Input
 import retrieveGPS from RetrieveGPS.py #GPS Input
 import gyroMain from gyroscope.py #Gyroscope Output
