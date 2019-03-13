@@ -1,12 +1,6 @@
-Andrew/Hardeep
-#this part of the code was copied in part from gareth and adrians work 
-
+#Hardeep and Andrew
+#This part of the code was copied in part from gareth and adrians work
 import RPi.GPIO as GPIO
-
-#straight -> 0Hz
-#starboard, hard -> 90Hz
-#port, hard -> -90Hz
-pi = 3.14159265359
 
 def setupPi(frequency):
     GPIO.setmode(GPIO.BOARD) #uses board pins
@@ -15,23 +9,35 @@ def setupPi(frequency):
     pin.start(1) #sets initial position of rudder
     return pinsetup
 
-def runPi(pin):
-    try:
-        print("Attempting to set rudder servo")
-        GPIO.output(12,1) #sends a HIGH signal to pin 12
-    except:
-        print("Error")
-        return "Failed"
+def setRudder(pin, angle):
+    
+    dutyChange = int(angle/18) + 1 
 
+    try:
+          print("Attempting to set rudder servo")
+          pin.start(1)
+          pin.ChangeDutyCycle(dutyChange)
+          time.sleep(5) #until change has been made. 
+    except:
+        print("error,, servo contact has been interrupted")
+        return "Failed"
     finally:
         pin.stop()
-        GPIO.cleanup() #Clean up after yourself
+        GPIO.cleanup()
+
     return "Success"
 
-def main():
-    DegAngle = float(input())
-    while (DegAngle > -90 and DegAngle < 90):
-        RadAngle = DegAngle * (pi/180) 
-        
-    setup = setupPi(RadAngle)
-    runPi(setup)
+def RudderMain():
+    setup = setupPi()
+    #runner =true
+
+    rudderAngle = int(input("enter the angle you would like teh rudder then press enter: "))
+
+    while runner :
+        rudderAngle = int(input("enter teh angle you would like the rudder then press enter: "))
+
+    if rudderAngle == "q" or rudderAngle == "Q":
+        runner = false
+        print("finished")
+
+    setrudder(setup, rudderAngle) 
