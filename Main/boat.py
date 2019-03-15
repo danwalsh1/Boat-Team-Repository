@@ -1,6 +1,6 @@
 #Andrew, Gareth, Adrian
 
-import main from New_compass_code.py #Compass Input
+import compassMain from New_compass_code.py #Compass Input
 import retrieveGPS from RetrieveGPS.py #GPS Input
 import gyroMain from gyroscope.py #Gyroscope Output
 import RudderMain from RudderMove.py #Rudder Output
@@ -18,7 +18,7 @@ def concatenateMain():
         boolRunning = True
         while boolRunning:
             try:
-                interpretDirection(retrieveGPS(), main()) #return value from retrieveGPS used as Parameter
+                interpretDirection(retrieveGPS(), compassMain()) #return value from retrieveGPS used as Parameter
                 gyroMain()
             except KeyboardInterrupt:
                 boolRunning = False
