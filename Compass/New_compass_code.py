@@ -48,7 +48,7 @@ def write_byte(adr, value):
     bus.write_byte_data(address, adr, value)
 
  
-def main:
+def compassMain:
   
     bus = smbus.SMBus(0)
 
