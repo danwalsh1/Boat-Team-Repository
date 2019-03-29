@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Boat Client</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 100%;
+      }
+      
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+	<div style="text-align: center; padding-top: 10px;">
+		<form>
+			<input type="button" onclick="nextMarker()" value="Next"/>
+			<input type="button" onclick="skipFiveMarker()" value="Skip Five"/>
+		</form>
+	</div>
+	<table style="width: 100%; height: 100%;">
+		<tr>
+			<td width="50%" style="padding: 10px;">
+				<canvas id="guiCanvas" width="100%" height="100%" style="border: 1px solid #000000;"></canvas>
+			</td>
+			<td>
+				<div id="map"></div>
+			</td>
+		</tr>
+	</table>
+	<!-- vvv API KEY NEEDED BELOW vvv -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=API_KEY_NEEDED"></script>
+	<!-- ^^^ API KEY NEEDED ABOVE ^^^ -->
+    <script>
+      var map;
+	  var pos = 0;
+	  var marker;
+	  var guiCanvas = document.getElementById('guiCanvas');
+	  var gui = guiCanvas.getContext("2d");
+	  
+      function initMap() {
+		// Initialises the Google map and the boat debug GUI
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 52.325, lng: -1.321},
+          zoom: 14
+        });
+		// Setup the canvas and draw the center circle
+		guiCanvas.style.width="100%";
+		guiCanvas.style.height="100%";
+		guiCanvas.width = guiCanvas.offsetWidth;
+		guiCanvas.height = guiCanvas.offsetHeight;
+		gui.beginPath();
+		gui.arc((guiCanvas.width / 2), (guiCanvas.height / 2), 30, 0, 2 * Math.PI);
+		gui.fillStyle = "black";
+		gui.fill();
+      }
+	  
+	  function addMarker(fLat, fLng, fMap) {
+		// Adds a red marker to the Google map. Used to display the boats current position
+		var latLng = new google.maps.LatLng(fLat,fLng);
+		var marker = new google.maps.Marker({position: latLng, title: "Boat"});
+		marker.setMap(fMap);
+		return marker;
+	  }
+	  
+	  function addWaypoint(fLat, fLng, fMap) {
+		// Adds an orange marker to the Google map. Used to display the waypoint that the boat is currently heading towards.
+		var latLng = new google.maps.LatLng(fLat,fLng);
+		var marker = new google.maps.Marker({position: latLng, title: "Boat", icon: {url: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"}});
+		marker.setMap(fMap);
+		return marker;
+	  }
+	  
+	  function nextMarker(){
+		// Called when the "Next" button is pressed. Moves both the Google map and the boat debug GUI onto the next line of the log.
+		runDebug();
+		drawGui();
+		pos++;
+	  }
+	  
+	  function skipFiveMarker(){
+		// Called when the "Skip Five" button is pressed. Moves both the Google map and the boat debug GUI forward five lines of the log.
+		runDebug();
+		drawGui();
+		pos = pos + 5;
+	  }
+	  
+	  function trueAngle(angle){
+		// When drawing, 0 degrees starts at EAST. Function returns given angle with 0 degrees at NORTH.
+		angle = angle - 90;
+		return angle;
+	  }
+	  
+	  function runDebug(){
+		// Updates the Google map to display the boats current position and the waypoint the boat is currently heading towards.
+		if(pos == 0){
+			// No marker or waypoint has been added yet. Add the boats position marker and the waypoint marker.
+			marker = addMarker(logData[pos][0], logData[pos][1], map);
+			waypoint = addWaypoint(logData[pos][5], logData[pos][6], map);
+			
+			// Center the Google map on the boats current position
+			map.setCenter(new google.maps.LatLng(logData[pos][0], logData[pos][1]));
+		}else{
+			// Marker and waypoint already exist, update their position.
+			if(pos >= logData.length){
+				// End of log reached, start from begining.
+				pos = 0;
+			}
+			let latlong = new google.maps.LatLng(logData[pos][0], logData[pos][1]);
+			let latlongWaypoint = new google.maps.LatLng(logData[pos][5], logData[pos][6]);
+			marker.setPosition(latlong);
+			waypoint.setPosition(latlongWaypoint);
+		}
+		
+		
+	  }
+	  
+	  function drawGui(){
+		// Clear canvas
+		gui.clearRect(0,0,guiCanvas.width, guiCanvas.height);
+		
+		// Set variables
+		let x = guiCanvas.width / 2;
+		let y = guiCanvas.height / 2;
+		let len = x + y;
+		let cirLen = 30;
+		let Rlen = cirLen * 2;
+		
+		// Draw center circle
+		gui.beginPath();
+		gui.lineWidth = 1;
+		gui.strokeStyle = "#FFFFFF";
+		gui.beginPath();
+		gui.arc(x, y, cirLen, 0, 2 * Math.PI);
+		gui.fillStyle = "black";
+		gui.fill();
+		
+		// Draw current heading
+		gui.beginPath();
+		gui.moveTo(x, y);
+		gui.lineTo(x + len * Math.cos(Math.PI * trueAngle(logData[pos][2]) / 180), y + len * Math.sin(Math.PI * trueAngle(logData[pos][2]) / 180));
+		gui.lineWidth = 3;
+		gui.strokeStyle = "#0000FF";
+		gui.stroke();
+		console.log("Curr Heading Drawn");
+		
+		// Draw Desired Heading
+		gui.beginPath();
+		gui.moveTo(x, y);
+		gui.lineTo(x + len * Math.cos(Math.PI * trueAngle(logData[pos][3]) / 180), y + len * Math.sin(Math.PI * trueAngle(logData[pos][3]) / 180));
+		gui.lineWidth = 1;
+		gui.strokeStyle = "#FF9900";
+		gui.stroke();
+		console.log("Desired Heading Drawn");
+		
+		// Draw rudder angle
+		gui.beginPath();
+		gui.moveTo(x, y);
+		gui.lineTo(x + Rlen * Math.cos(Math.PI * (logData[pos][4] + trueAngle(logData[pos][2]) + 180) / 180), y + Rlen * Math.sin(Math.PI * (logData[pos][4] + trueAngle(logData[pos][2]) + 180) / 180));
+		gui.lineWidth = 3;
+		gui.strokeStyle = "#008e15";
+		gui.stroke();
+		console.log("Rudder Drawn");
+	  }
+	  
+	  // The log data ("Current Latitude", "Current Longitude", "Current Heading", "Desired Heading", "Rudder Angler", "Waypoint Latitude", "Waypoint Logitude")
+	  var logData = [[52.329482,-1.330523,91,102,0,52.328194,-1.318421],[52.329430,-1.326914,104,108,45,52.328194,-1.318421],[52.329115,-1.324938,100,109,-22,52.328194,-1.318421],[52.328905,-1.322965,101,115,22,52.328194,-1.318421],[52.328695,-1.321334,132,126,45,52.328194,-1.318421],[52.328066,-1.320219,171,203,22,52.323525,-1.323140],[52.327331,-1.320048,200,207,22,52.323525,-1.323140],[52.326125,-1.320734,211,210,45,52.323525,-1.323140],[52.325233,-1.321592,203,209,0,52.323525,-1.323140],[52.324341,-1.322192,218,214,-22,52.323525,-1.323140],[52.323659,-1.323050,240,210,22,52.323525,-1.323140],[52.323292,-1.324080,262,307,22,52.323525,-1.323140],[52.323187,-1.325281,290,313,45,52.326777,-1.331204],[52.323607,-1.327254,320,321,45,52.326777,-1.331204],[52.324656,-1.328713,317,321,22,52.326777,-1.331204],[52.325600,-1.330171,322,325,0,52.326777,-1.331204],[52.326125,-1.330857,322,321,0,52.326777,-1.331204]];
+	  initMap();
+    </script>
+  </body>
+</html>
